@@ -1,0 +1,33 @@
+{
+  "name": "js_vanilla",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.1.0",
+    "jest": "^25.1.0",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "start:dev": "webpack-dev-server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+
+  "jest": {
+    "moduleFileExtensions": ["js"],
+		"modulePaths": ["<rootDir>"],
+    "moduleDirectories": ["node_modules", "src"]
+  }
+}
