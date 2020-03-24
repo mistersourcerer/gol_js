@@ -1,8 +1,9 @@
-const csl = require("./rendering/console");
-
-const something = () => 1;
-csl.render(something);
+const grid = (width, height) => {
+	return Array(height)
+		.fill(null)
+		.map(() => Array(width).fill(false, 0, width));
+};
 
 module.exports = {
-  something: something,
-}
+	grid: grid,
+};
