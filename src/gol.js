@@ -1,17 +1,17 @@
 const grid = (width, height) => {
-	return Array(height)
-		.fill(null)
-		.map(() => {
-			return Array(width).fill(false, 0, width);
-		});
+  return Array(height)
+    .fill(null)
+    .map(() => {
+      return Array(width).fill(false, 0, width);
+    });
 };
 
 const spawn = (grid, x, y) => {
-	return _cellValue(grid, x, y, true);
+  return _cellValue(grid, x, y, true);
 };
 
 const kill = (grid, x, y) => {
-	return _cellValue(grid, x, y, false);
+  return _cellValue(grid, x, y, false);
 };
 
 const neighbors = (grid, x, y) => {
@@ -29,9 +29,9 @@ const neighbors = (grid, x, y) => {
 };
 
 const _cellValue = (grid, x, y, value) => {
-	let copy = _cloneGrid(grid);
-	copy[y][x] = value;
-	return copy;
+  let copy = _cloneGrid(grid);
+  copy[y][x] = value;
+  return copy;
 };
 
 const _cloneGrid = (grid) => {
@@ -48,8 +48,8 @@ const _cellAt = (grid, x, y) => {
 }
 
 module.exports = {
-	grid: grid,
-	spawn: spawn,
+  grid: grid,
+  spawn: spawn,
   kill: kill,
   neighbors: neighbors,
 };
