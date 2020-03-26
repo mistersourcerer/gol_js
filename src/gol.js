@@ -10,8 +10,6 @@ const spawn = (grid, x, y) => {
   return _cellValue(grid, x, y, true);
 };
 
-const kill = (grid, x, y) => {
-  return _cellValue(grid, x, y, false);
 };
 
 const neighbors = (grid, x, y) => {

@@ -25,23 +25,6 @@ describe('spawn', () => {
   });
 });
 
-
-describe('kill', () => {
-  test('kills a cell on a given coordinate on a grid', () => {
-    let grid = gol.grid(5, 5);
-    grid = gol.spawn(grid, 2, 2);
-    grid = gol.spawn(grid, 2, 3);
-
-    expect(gol.kill(grid, 2, 2)).toEqual([
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-      [false, false, true , false, false],
-      [false, false, false, false, false],
-    ]);
-  });
-});
-
 describe('neighbors', () => {
   test('recognizes alive neighbors for a coordinate on the grid', () => {
     let grid = gol.spawn(gol.grid(5, 5), 2, 2);
