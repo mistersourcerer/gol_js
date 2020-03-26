@@ -1,15 +1,13 @@
-const grid = (width, height) => {
-  return Array(height)
+const grid = (cols, rows) => {
+  return Array(rows)
     .fill(null)
-    .map(() => {
-      return Array(width).fill(false, 0, width);
-    });
+    .map(() => Array(cols).fill(false, 0, cols));
 };
 
 const spawn = (grid, x, y) => {
-  return _cellValue(grid, x, y, true);
-};
-
+  let copy = _cloneGrid(grid);
+  copy[y][x] = true;
+  return copy;
 };
 
 const neighbors = (grid, x, y) => {
@@ -19,17 +17,17 @@ const neighbors = (grid, x, y) => {
     [x - 1, y + 1], [x, y + 1], [x + 1, y + 1],
   ];
 
-  let alive = false;
   return neighbourhood.reduce((sum, next) => {
-    alive = _cellAt(grid, ...next) === true
-    return sum + (alive ? 1 : 0);
+    return sum + (_cellAt(grid, ...next) === true ? 1 : 0);
   }, 0);
 };
 
-const _cellValue = (grid, x, y, value) => {
-  let copy = _cloneGrid(grid);
-  copy[y][x] = value;
-  return copy;
+const nextGen = (currentGrid) => {
+  return currentGrid.map((row, y) => {
+    return row.map((currentStatus, x) => {
+      return _applyRules(neighbors(currentGrid, x, y), currentStatus);
+    });
+  });
 };
 
 const _cloneGrid = (grid) => {
@@ -38,16 +36,27 @@ const _cloneGrid = (grid) => {
 
 const _cellAt = (grid, x, y) => {
   // Transforms coordinates starting in 1 to array indexes
-  let row = grid[x];
-  if(row === undefined) {
-    return;
-  }
-  return grid[x][y];
+  let row = grid[y];
+  if(row === undefined) { return; }
+  return grid[y][x];
 }
+
+const _applyRules = (neighborsCount, currentStatus) => {
+  let alive = currentStatus === true;
+  let nextStatus = false;
+
+  if (alive && neighborsCount >= 2 && neighborsCount <= 3) {
+    nextStatus = true;
+  } else if(!alive && neighborsCount == 3) {
+    nextStatus = true;
+  }
+
+  return nextStatus;
+};
 
 module.exports = {
   grid: grid,
   spawn: spawn,
-  kill: kill,
   neighbors: neighbors,
+  nextGen: nextGen,
 };
