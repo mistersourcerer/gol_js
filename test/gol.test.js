@@ -1,4 +1,4 @@
-const gol = require('gol');
+import gol from 'gol';
 
 describe('grid', () => {
   test('creates an empty grid of width(param) by height(param)', () => {
