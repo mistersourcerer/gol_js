@@ -30,6 +30,10 @@ const nextGen = (currentGrid) => {
   });
 };
 
+const population = (grid) => {
+  return grid.flat().filter((cell) => cell === true).length;
+};
+
 const _cloneGrid = (grid) => {
   return grid.map((row) => Array.from(row));
 };
@@ -59,4 +63,5 @@ export default {
   spawn: spawn,
   neighbors: neighbors,
   nextGen: nextGen,
+  population: population,
 };

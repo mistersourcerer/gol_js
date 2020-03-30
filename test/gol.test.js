@@ -141,3 +141,15 @@ describe('nextGen', () => {
     ]);
   });
 });
+
+describe('population', () => {
+  test('counts how many live cells exist on a given grid', () => {
+    let grid = [
+      [false, false, false],
+      [true,  true,  true],
+      [false, false, false],
+    ];
+
+    expect(gol.population(grid)).toBe(3);
+  });
+});;;;
