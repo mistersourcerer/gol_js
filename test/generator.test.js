@@ -40,7 +40,7 @@ describe('nextGen', () => {
 
   describe('Using options to configure next generation', () => {
     test('accepts time to live as an option(al) parameter', () => {
-      let generation = {grid: [true, true], brithDate: now};
+      let generation = {grid: [true, true], birthDate: now};
       let {grid} = generator.nextGen(generation, now + 501, {ttl: 500, gol: gol});
 
       expect(gol.nextGen.mock.calls.length).toBe(1);
