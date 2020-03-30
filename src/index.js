@@ -21,8 +21,13 @@ let grid = _glider(gol.grid(...gridSize));
 let currentGeneration = {grid: grid};
 
 let draw = () => {
-  let newGeneration = generator.nextGen(currentGeneration, gol, {ttl: ttl});
+  let newGeneration = generator.nextGen(
+    currentGeneration,
+    Date.now(),
+    {ttl: ttl, gol:gol}
+  );
   let {grid, birthDate} = newGeneration;
+
   if(birthDate != currentGeneration['birthDate']) {
     currentGeneration = newGeneration;
     generation += 1;

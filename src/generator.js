@@ -1,6 +1,9 @@
+import gol from './gol';
+
 const defaultTTL = 300;
 const defaultOptions = {
   ttl: defaultTTL,
+  gol: gol,
 };
 
 const optionValue = (key, options) => {
@@ -11,26 +14,28 @@ const optionValue = (key, options) => {
   return options[key];
 };
 
-const oldEnough = (birthDate, options) => {
+const oldEnough = (birthDate, now, ttl) => {
   if(birthDate === undefined) {
     return true;
   }
-  return (Date.now() - birthDate) >= optionValue('ttl', options);
+  return (now - birthDate) >= ttl;
 }
 
-const nextGen = (generation, gol, options) => {
+const nextGen = (generation, now, options, whenNewGeneration) => {
   let {
     grid,
     birthDate,
   } = generation;
 
-  if(!oldEnough(birthDate, options)) {
+  if(!oldEnough(birthDate, now, optionValue('ttl', options))) {
     return generation;
   }
 
+  let gol = optionValue('gol', options);
+
   return {
     grid: gol.nextGen(grid),
-    birthDate: Date.now(),
+    birthDate: now,
   }
 };
 
