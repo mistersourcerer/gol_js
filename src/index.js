@@ -2,7 +2,7 @@ import gol from './gol';
 import csl from './rendering/console';
 import generator from './generator'
 
-let generation = 1;
+let done = false;
 let generations = 20;
 let ttl = 300;
 let gridSize = [15, 15];
@@ -15,14 +15,14 @@ const glider = (grid) => {
   return gol.spawn(grid, 2, 3);
 }
 
-let currentGeneration = {grid: glider(gol.grid(...gridSize))};
+let iteration = {grid: glider(gol.grid(...gridSize))};
 
 let draw = (newGeneration) => {
-  let {grid, birthDate} = newGeneration;
+  let {grid, birthDate, generation} = newGeneration;
 
-  if(birthDate != currentGeneration['birthDate']) {
-    currentGeneration = newGeneration;
-    generation += 1;
+  if(birthDate != iteration['birthDate']) {
+    done = generation >= generations;
+    iteration = newGeneration;
     csl.render(grid);
     console.log(`gen: ${generation}`);
   }
@@ -31,24 +31,21 @@ let draw = (newGeneration) => {
 // TODO: a better way to make this available?
 window.start = (gens, cols, rows) => {
   generations = gens;
-  generation = 1;
-  currentGeneration = {grid: glider(gol.grid(cols, rows))};
+  iteration = {grid: glider(gol.grid(cols, rows))};
   requestAnimationFrame(loop);
 };
 
 window.stop = () => {
-  generation = generations;
+  done = true;
   console.clear();
 }
 
 const loop = () => {
-  if(generation >= generations) {
+  if(done) {
     console.log("that was a good run");
     return;
   }
-
-  generator.nextGen(currentGeneration, Date.now(), {ttl: ttl, gol:gol}, draw);
-
+  generator.nextGen(iteration, Date.now(), {ttl: ttl, gol:gol}, draw);
   requestAnimationFrame(loop);
 }
 

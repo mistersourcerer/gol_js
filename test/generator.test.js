@@ -48,7 +48,7 @@ describe('nextGen', () => {
     });
   });
 
-  describe('invoking callback after creating new generation', () => {
+  describe('callback for new generations', () => {
     test('invokes when new generation is created', () => {
       let whenNewGen = jest.fn();
       let generation = {grid: [[true], [true]]};
@@ -66,4 +66,11 @@ describe('nextGen', () => {
     });
   });
 
+  test('keep track of generation count', () => {
+    let iteration = generator.nextGen({grid: [[true], [true]]}, now);
+    expect(iteration.generation).toBe(1);
+
+    iteration = generator.nextGen(iteration, now + 301, {ttl: 300});
+    expect(iteration.generation).toBe(2);
+  })
 });

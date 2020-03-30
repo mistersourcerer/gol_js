@@ -6,21 +6,6 @@ const defaultOptions = {
   gol: gol,
 };
 
-const optionValue = (key, options) => {
-  if(typeof(options) === 'undefined' || typeof(options[key]) === 'undefined') {
-    return defaultOptions[key];
-  }
-  // TODO: check the existence of key on defaultOptions first
-  return options[key];
-};
-
-const defaultValues = (keys, options) => {
-  return keys.reduce((defaults, key) => {
-    defaults[key] = optionValue(key, options);
-    return defaults;
-  }, {});
-}
-
 const oldEnough = (birthDate, now, ttl) => {
   if(birthDate === undefined) {
     return true;
@@ -28,11 +13,10 @@ const oldEnough = (birthDate, now, ttl) => {
   return (now - birthDate) >= ttl;
 }
 
-const generate = (gol, grid, now, callback) => {
-  let newGeneration = {
+const generate = (gol, grid, attributes, callback) => {
+  let newGeneration = Object.assign(attributes, {
     grid: gol.nextGen(grid),
-    birthDate: now,
-  }
+  });
   callback(newGeneration);
 
   return newGeneration;
@@ -40,11 +24,12 @@ const generate = (gol, grid, now, callback) => {
 
 const noop = () => {};
 
-const nextGen = (generation, now, options, whenNewGeneration) => {
+const nextGen = (iteration, now, options, whenNewGeneration) => {
   let {
     grid,
     birthDate,
-  } = generation;
+    generation,
+  } = iteration;
 
   // options and callback are optional
   if(typeof(whenNewGeneration) === 'undefined') {
@@ -59,13 +44,16 @@ const nextGen = (generation, now, options, whenNewGeneration) => {
   let {
     ttl,
     gol,
-  } = defaultValues(['ttl', 'gol'], options);
+  } = Object.assign(defaultOptions, options);
 
   if(!oldEnough(birthDate, now, ttl)) {
-    return generation;
+    return iteration;
   }
 
-  return generate(gol, grid, now, whenNewGeneration);
+  return generate(gol, grid, {
+    birthDate: now,
+    generation: (typeof(generation) === 'undefined') ? 1 : generation + 1,
+  }, whenNewGeneration);
 };
 
 export default {
