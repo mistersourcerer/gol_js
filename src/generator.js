@@ -34,6 +34,6 @@ const nextGen = (generation, gol, options) => {
   }
 };
 
-module.exports = {
+export default {
   nextGen: nextGen,
 };

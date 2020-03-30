@@ -54,7 +54,7 @@ const _applyRules = (neighborsCount, currentStatus) => {
   return nextStatus;
 };
 
-module.exports = {
+export default {
   grid: grid,
   spawn: spawn,
   neighbors: neighbors,

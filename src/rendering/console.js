@@ -34,6 +34,6 @@ const render = (grid) => {
   });
 };
 
-module.exports = {
+export default {
   render: render,
 }
