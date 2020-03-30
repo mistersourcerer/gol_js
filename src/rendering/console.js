@@ -1,9 +1,10 @@
-const render = (grid) => {
-  console.clear();
+const joinCells = (grid, joinWith, live) => {
   let sym;
-  let joined = grid.map((row, y) => {
+  let dead = ''.padEnd(live.length, ' ');
+
+  return grid.map((row, y) => {
     return row.map((cell, x) => {
-      sym = (cell === true) ? 'O' : ' ';
+      sym = (cell === true) ? live : dead;
 
       if(x == 0) {
         return `|| ${sym}`;
@@ -12,24 +13,43 @@ const render = (grid) => {
       } else {
         return sym;
       }
-    }).join("|");
+    }).join(joinWith);
   });
+};
+
+const defaults = {
+  output: console,
+  joinWith: '|',
+  live: 'O',
+  cycler: ['*', '#'],
+};
+
+const render = (grid, options) => {
+  let {
+    output,
+    live,
+    joinWith,
+    dead,
+    cycler,
+  } = Object.assign(defaults, options);
+
+  output.clear();
+
+  let joined = joinCells(grid, joinWith, live);
 
   joined.forEach((line, idx) => {
-    let id = performance.now().toString().padEnd(18, ' ');
-    let filler = `${id}        `;
-    let row = `${filler}${line}`;
+    let id = cycler[idx % cycler.length].toString();
+    let filler = id;
+    let row = `${line}${filler}`;
 
     if (idx == 0) {
-      let boxTop = `${''.padEnd(filler.length - 1, ' ')} ${''.padEnd(line.length, "*")}`;
-      console.log(boxTop);
+      output.log(''.padEnd(line.length, "*"));
     }
 
-    console.log(row);
+    output.log(row);
 
     if (idx == joined.length - 1) {
-      let boxBottom = `${''.padEnd(filler.length - 1, ' ')} ${''.padEnd(line.length, "*")}`;
-      console.log(boxBottom);
+      output.log(''.padEnd(line.length, "*"));
     }
   });
 };

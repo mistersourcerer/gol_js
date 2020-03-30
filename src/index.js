@@ -3,9 +3,10 @@ import csl from './rendering/console';
 import generator from './generator'
 
 let done = false;
-let generations = 20;
+let generations = 40;
 let ttl = 300;
-let gridSize = [15, 15];
+let gridSize = [25, 25];
+let renderOptions = {live: '[0]', joinWith: '', cycler: ['\'', '`']};
 
 const glider = (grid) => {
   grid = gol.spawn(grid, 0, 2);
@@ -23,13 +24,14 @@ let draw = (newGeneration) => {
   if(birthDate != iteration['birthDate']) {
     done = generation >= generations;
     iteration = newGeneration;
-    csl.render(grid);
+    csl.render(grid, renderOptions);
     console.log(`gen: ${generation}`);
   }
 }
 
 // TODO: a better way to make this available?
-window.start = (gens, cols, rows) => {
+window.start = (gens = generations, cols = gridSize[0], rows = gridSize[1]) => {
+  done = false;
   generations = gens;
   iteration = {grid: glider(gol.grid(cols, rows))};
   requestAnimationFrame(loop);
