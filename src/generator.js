@@ -14,11 +14,28 @@ const optionValue = (key, options) => {
   return options[key];
 };
 
+const defaultValues = (keys, options) => {
+  return keys.reduce((defaults, key) => {
+    defaults[key] = optionValue(key, options);
+    return defaults;
+  }, {});
+}
+
 const oldEnough = (birthDate, now, ttl) => {
   if(birthDate === undefined) {
     return true;
   }
   return (now - birthDate) >= ttl;
+}
+
+const generate = (gol, grid, now, callback) => {
+  let newGeneration = {
+    grid: gol.nextGen(grid),
+    birthDate: now,
+  }
+  callback(newGeneration);
+
+  return newGeneration;
 }
 
 const noop = () => {};
@@ -39,18 +56,16 @@ const nextGen = (generation, now, options, whenNewGeneration) => {
     }
   }
 
-  if(!oldEnough(birthDate, now, optionValue('ttl', options))) {
+  let {
+    ttl,
+    gol,
+  } = defaultValues(['ttl', 'gol'], options);
+
+  if(!oldEnough(birthDate, now, ttl)) {
     return generation;
   }
 
-  let gol = optionValue('gol', options);
-  let newGeneration = {
-    grid: gol.nextGen(grid),
-    birthDate: now,
-  }
-  whenNewGeneration(newGeneration);
-
-  return newGeneration;
+  return generate(gol, grid, now, whenNewGeneration);
 };
 
 export default {
