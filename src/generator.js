@@ -21,22 +21,36 @@ const oldEnough = (birthDate, now, ttl) => {
   return (now - birthDate) >= ttl;
 }
 
+const noop = () => {};
+
 const nextGen = (generation, now, options, whenNewGeneration) => {
   let {
     grid,
     birthDate,
   } = generation;
 
+  // options and callback are optional
+  if(typeof(whenNewGeneration) === 'undefined') {
+    if(typeof(options) === 'function') {
+      whenNewGeneration = options;
+      options = {};
+    } else {
+      whenNewGeneration = noop;
+    }
+  }
+
   if(!oldEnough(birthDate, now, optionValue('ttl', options))) {
     return generation;
   }
 
   let gol = optionValue('gol', options);
-
-  return {
+  let newGeneration = {
     grid: gol.nextGen(grid),
     birthDate: now,
   }
+  whenNewGeneration(newGeneration);
+
+  return newGeneration;
 };
 
 export default {

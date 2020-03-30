@@ -47,4 +47,23 @@ describe('nextGen', () => {
       expect(grid).toEqual([true, false]);
     });
   });
+
+  describe('invoking callback after creating new generation', () => {
+    test('invokes when new generation is created', () => {
+      let whenNewGen = jest.fn();
+      let generation = {grid: [[true], [true]]};
+      generator.nextGen(generation, now, whenNewGen);
+
+      expect(whenNewGen.mock.calls.length).toBe(1);
+    });
+
+    test('does not invoke if current gen is too young', () => {
+      let whenNewGen = jest.fn();
+      let generation = {grid: [[true], [true]], birthDate: now};
+      generator.nextGen(generation, now + 1, {ttl: 500}, whenNewGen);
+
+      expect(whenNewGen.mock.calls.length).toBe(0);
+    });
+  });
+
 });
