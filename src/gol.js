@@ -1,67 +1,61 @@
-const grid = (cols, rows) => {
-  return Array(rows)
-    .fill(null)
-    .map(() => Array(cols).fill(false, 0, cols));
+import life from './life';
+import generator from './generator';
+import consoleRender from './rendering/console';
+import { v4 as uuid } from 'uuid';
+
+const GolJS = () => {};
+
+GolJS.forms = {
+  glider: (grid) => {
+    grid = life.spawn(grid, 0, 2);
+    grid = life.spawn(grid, 1, 3);
+    grid = life.spawn(grid, 2, 1);
+    grid = life.spawn(grid, 2, 2);
+    return life.spawn(grid, 2, 3);
+  }
 };
 
-const spawn = (grid, x, y) => {
-  let copy = _cloneGrid(grid);
-  copy[y][x] = true;
-  return copy;
+const defaultConfig = {
+  render: consoleRender,
+  generator: generator,
+  gridSize: [25, 25],
+  clock: Date,
+  initialForms: [GolJS.forms.glider],
+  generations: 40,
+  options: {
+    render: {
+      alive: '[O]', joinWith: '', cycler: ['`', '\''],
+    },
+    generator: {
+      ttl: 300,
+    },
+  }
 };
 
-const neighbors = (grid, x, y) => {
-  let neighbourhood = [
-    [x - 1, y - 1], [x, y - 1], [x + 1, y - 1],
-    [x - 1, y],                 [x + 1, y],
-    [x - 1, y + 1], [x, y + 1], [x + 1, y + 1],
-  ];
+const state = (standardConfig) => {
+  return (overrides = {}) => {
+    let config = Object.assign(standardConfig, overrides);
+    config['__id__'] = uuid();
 
-  return neighbourhood.reduce((sum, next) => {
-    return sum + (_cellAt(grid, ...next) === true ? 1 : 0);
-  }, 0);
+    if(config.generation === undefined) {
+      config = {...config, generation:{
+        grid: config.initialForms[0](life.grid(...config.gridSize)),
+        birthDate: config.clock.now(),
+        generation: 1,
+      }};
+    }
+
+    return config.generation = config.generator.nextGen(
+      config.generation,
+      config.clock.now()
+    );
+  }
 };
 
-const nextGen = (currentGrid) => {
-  return currentGrid.map((row, y) => {
-    return row.map((currentStatus, x) => {
-      return _applyRules(neighbors(currentGrid, x, y), currentStatus);
-    });
-  });
-};
+GolJS.gol = (initialConfig = {}) => {
+  let standardConfig = Object.assign(defaultConfig, initialConfig);
 
-const population = (grid) => {
-  return grid.flat().filter((cell) => cell === true).length;
-};
-
-const _cloneGrid = (grid) => {
-  return grid.map((row) => Array.from(row));
-};
-
-const _cellAt = (grid, x, y) => {
-  // Transforms coordinates starting in 1 to array indexes
-  let row = grid[y];
-  if(row === undefined) { return; }
-  return grid[y][x];
+  return Object.assign(state(standardConfig), standardConfig);
 }
 
-const _applyRules = (neighborsCount, currentStatus) => {
-  let alive = currentStatus === true;
-  let nextStatus = false;
-
-  if (alive && neighborsCount >= 2 && neighborsCount <= 3) {
-    nextStatus = true;
-  } else if(!alive && neighborsCount == 3) {
-    nextStatus = true;
-  }
-
-  return nextStatus;
-};
-
-export default {
-  grid: grid,
-  spawn: spawn,
-  neighbors: neighbors,
-  nextGen: nextGen,
-  population: population,
-};
+export default GolJS;

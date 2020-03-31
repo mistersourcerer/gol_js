@@ -1,155 +1,56 @@
-import gol from 'gol';
+import consoleRender from 'rendering/console';
+import GolJS from 'gol.js';
 
-describe('grid', () => {
-  test('creates an empty grid of width(param) by height(param)', () => {
-    expect(gol.grid(5, 5)).toEqual([
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-      [false, false, false, false, false],
-    ]);
-  });
-});
+describe('gol', () => {
+  let gol;
 
-describe('spawn', () => {
-  test('spawns a new cell on a given coordinate on a grid', () => {
-    let grid = gol.grid(5, 2);
-    grid = gol.spawn(grid, 2, 0);
-    grid = gol.spawn(grid, 2, 1);
-
-    expect(grid).toEqual([
-      [false, false, true , false, false],
-      [false, false, true, false, false],
-    ]);
-  });
-});
-
-describe('neighbors', () => {
-  test('recognizes alive neighbors for a coordinate on the grid', () => {
-    let grid = gol.spawn(gol.grid(5, 5), 2, 2);
-    expect(gol.neighbors(grid, 2, 2)).toBe(0);
-
-    // all possible neighboring positions
-    expect(gol.neighbors(gol.spawn(grid, 1, 1), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 1, 2), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 1, 3), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 2, 1), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 2, 3), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 3, 1), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 3, 2), 2, 2)).toBe(1);
-    expect(gol.neighbors(gol.spawn(grid, 3, 3), 2, 2)).toBe(1);
+  beforeEach(() => {
+    gol = GolJS.gol();
   });
 
-  test('recognizes multiple neighbors for a coordinate on the grid', () => {
-    let grid = gol.spawn(gol.grid(5, 5), 2 ,2);
-    grid = gol.spawn(grid, 1, 1);
-    grid = gol.spawn(grid, 1, 2);
-    grid = gol.spawn(grid, 1, 3);
-
-    expect(gol.neighbors(grid, 2, 2)).toBe(3);
+  test('returns a function', () => {
+    expect(typeof(GolJS.gol())).toEqual('function');
   });
 
-  test('does not consider the cell itself a neighbor', () => {
-    let grid = gol.spawn(gol.grid(3, 3), 1, 0);
-    grid = gol.spawn(grid, 1, 1);
-
-    expect(gol.neighbors(grid, 1, 0)).toBe(1);
-  });
-
-  describe('grid edge', () => {
-    test('does not go bananas if neighbors would be on a negative coord', () => {
-      let grid = gol.spawn(gol.grid(3, 3), 1 , 1);
-      grid = gol.spawn(grid, 1, 2);
-
-      expect(gol.neighbors(grid, 1, 1)).toBe(1);
+  describe('Default configurations', () => {
+    test('uses console rendering', () => {
+      expect(gol.render).toEqual(consoleRender);
     });
 
-    test('does not go bananas if neighbors would be "out of bounds"', () => {
-      let grid = gol.spawn(gol.grid(3, 3), 2 , 2);
-      grid = gol.spawn(grid, 1, 2);
+    test('creates a 25x25 grid', () => {
+      expect(gol.gridSize).toEqual([25, 25]);
+    });
 
-      expect(gol.neighbors(grid, 2, 2)).toBe(1);
+    test('intializes with a glider', () => {
+      expect(gol.initialForms.length).toBe(1);
+      expect(gol.initialForms[0]).toEqual(GolJS.forms.glider);
+    });
+  });
+
+  describe('generate', () => {
+    test('returns the new generation', () => {
+      let nextGeneration = gol();
+
+      expect(nextGeneration.grid.length).toEqual(25);
+      expect(nextGeneration.grid[0].length).toEqual(25);
+      expect(nextGeneration.birthDate).not.toBe(undefined);
+      expect(nextGeneration.generation).toBe(1);
+    });
+
+    test('accepts override options', () => {
+      let clock = {now: jest.fn(() => 123)};
+      let nextGeneration = gol({
+        gridSize: [2, 2],
+        clock: clock,
+        initialForms: [grid => grid],
+      });
+
+      expect(nextGeneration.generation).toBe(1);
+      expect(nextGeneration.birthDate).toBe(123);
+      expect(nextGeneration.grid).toEqual([
+        [false, false],
+        [false, false],
+      ]);
     });
   });
 });
-
-describe('nextGen', () => {
-  test('cell dies when has fewer than two neighbors', () => {
-    // X O X
-    // X O X
-    // X X X
-    let grid = gol.spawn(gol.grid(3, 3), 1, 0);
-    grid = gol.spawn(grid, 1, 1);
-
-    // X X X
-    // X X X
-    // X X X
-    expect(gol.nextGen(grid)).toEqual([
-      [false, false, false],
-      [false, false, false],
-      [false, false, false],
-    ]);
-  });
-
-  test('cell survives when two neighbors exist', () => {
-    // two neighbors
-    // O O X X
-    // X X O X
-    let grid = gol.spawn(gol.grid(4, 2), 0, 0);
-    grid = gol.spawn(grid, 1, 0);
-    grid = gol.spawn(grid, 2, 1);
-
-    // X O X X
-    // X O X X -> given birth for having 3 neighbors
-    expect(gol.nextGen(grid)).toEqual([
-      [false,  true, false, false],
-      [false,  true, false, false],
-    ]);
-  });
-
-  test('cell survives when three neighbors exist', () => {
-    let grid = gol.spawn(gol.grid(4, 2), 1, 0);
-    grid = gol.spawn(grid, 2, 0);
-    grid = gol.spawn(grid, 1, 1);
-    grid = gol.spawn(grid, 2, 1);
-
-    // X O O X
-    // X O O X
-    expect(gol.nextGen(grid)).toEqual([
-      [false,  true,  true, false],
-      [false,  true,  true, false],
-    ]);
-  });
-
-  test('generates the blinker', () => {
-    // Let's use the blinker for this test
-    // X O X
-    // X O X
-    // X O X
-    let grid = gol.spawn(gol.grid(3, 3), 1, 0);
-    grid = gol.spawn(grid, 1, 1);
-    grid = gol.spawn(grid, 1, 2);
-
-    // X X X
-    // O O O
-    // X X X
-    expect(gol.nextGen(grid)).toEqual([
-      [false, false, false],
-      [true,  true,  true],
-      [false, false, false],
-    ]);
-  });
-});
-
-describe('population', () => {
-  test('counts how many live cells exist on a given grid', () => {
-    let grid = [
-      [false, false, false],
-      [true,  true,  true],
-      [false, false, false],
-    ];
-
-    expect(gol.population(grid)).toBe(3);
-  });
-});;;;
