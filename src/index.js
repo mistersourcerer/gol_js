@@ -1,4 +1,4 @@
-import gol from './gol';
+import life from './life';
 import csl from './rendering/console';
 import generator from './generator'
 
@@ -8,14 +8,14 @@ let ttl = 300;
 let gridSize = [25, 25];
 
 const glider = (grid) => {
-  grid = gol.spawn(grid, 0, 2);
-  grid = gol.spawn(grid, 1, 3);
-  grid = gol.spawn(grid, 2, 1);
-  grid = gol.spawn(grid, 2, 2);
-  return gol.spawn(grid, 2, 3);
+  grid = life.spawn(grid, 0, 2);
+  grid = life.spawn(grid, 1, 3);
+  grid = life.spawn(grid, 2, 1);
+  grid = life.spawn(grid, 2, 2);
+  return life.spawn(grid, 2, 3);
 }
 
-let iteration = {grid: glider(gol.grid(...gridSize))};
+let iteration = {grid: glider(life.grid(...gridSize))};
 
 let draw = (newGeneration) => {
   let {grid, birthDate, generation} = newGeneration;
@@ -23,7 +23,7 @@ let draw = (newGeneration) => {
   if(birthDate != iteration['birthDate']) {
     done = generation >= generations;
     iteration = newGeneration;
-    csl.render(grid, GolJS.renderOptions);
+    csl.render(grid, GolJS.options.render);
     console.log(`gen: ${generation}`);
   }
 }
@@ -33,7 +33,11 @@ const loop = () => {
     console.log("that was a good run");
     return;
   }
-  generator.nextGen(iteration, Date.now(), {ttl: ttl, gol:gol}, draw);
+
+  generator.nextGen(iteration, Date.now(), {ttl: ttl, life:life}, draw);
+
+  //lastGeneration = gol.generate(lastGeneration, Date.now());
+
   requestAnimationFrame(loop);
 }
 
@@ -41,7 +45,7 @@ const loop = () => {
 const start = (gens = generations, cols = gridSize[0], rows = gridSize[1]) => {
   done = false;
   generations = gens;
-  iteration = {grid: glider(gol.grid(cols, rows))};
+  iteration = {grid: glider(life.grid(cols, rows))};
   requestAnimationFrame(loop);
 };
 
@@ -51,7 +55,9 @@ const stop = () => {
 }
 
 const GolJS = {
-  renderOptions: {live: '[0]', joinWith: '', cycler: ['\'', '`']},
+  options: {
+    render: { alive: '[O]', joinWith: '', cycler: ['\'', '`'] },
+  },
   stop: stop,
   start: start,
 }

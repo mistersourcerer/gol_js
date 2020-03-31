@@ -1,9 +1,9 @@
-import gol from './gol';
+import life from './life';
 
 const defaultTTL = 300;
 const defaultOptions = {
   ttl: defaultTTL,
-  gol: gol,
+  life: life,
 };
 
 const oldEnough = (birthDate, now, ttl) => {
@@ -13,9 +13,9 @@ const oldEnough = (birthDate, now, ttl) => {
   return (now - birthDate) >= ttl;
 }
 
-const generate = (gol, grid, attributes, callback) => {
+const generate = (life, grid, attributes, callback) => {
   let newGeneration = Object.assign(attributes, {
-    grid: gol.nextGen(grid),
+    grid: life.nextGen(grid),
   });
   callback(newGeneration);
 
@@ -43,14 +43,14 @@ const nextGen = (iteration, now, options, whenNewGeneration) => {
 
   let {
     ttl,
-    gol,
+    life,
   } = Object.assign(defaultOptions, options);
 
   if(!oldEnough(birthDate, now, ttl)) {
     return iteration;
   }
 
-  return generate(gol, grid, {
+  return generate(life, grid, {
     birthDate: now,
     generation: (typeof(generation) === 'undefined') ? 1 : generation + 1,
   }, whenNewGeneration);

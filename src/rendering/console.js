@@ -1,10 +1,10 @@
-const joinCells = (grid, joinWith, live) => {
+const joinCells = (grid, joinWith, alive) => {
   let sym;
-  let dead = ''.padEnd(live.length, ' ');
+  let dead = ''.padEnd(alive.length, ' ');
 
   return grid.map((row, y) => {
     return row.map((cell, x) => {
-      sym = (cell === true) ? live : dead;
+      sym = (cell === true) ? alive : dead;
 
       if(x == 0) {
         return `|| ${sym}`;
@@ -20,14 +20,14 @@ const joinCells = (grid, joinWith, live) => {
 const defaults = {
   output: console,
   joinWith: '|',
-  live: 'O',
+  alive: 'O',
   cycler: ['*', '#'],
 };
 
 const render = (grid, options) => {
   let {
     output,
-    live,
+    alive,
     joinWith,
     dead,
     cycler,
@@ -35,7 +35,7 @@ const render = (grid, options) => {
 
   output.clear();
 
-  let joined = joinCells(grid, joinWith, live);
+  let joined = joinCells(grid, joinWith, alive);
 
   joined.forEach((line, idx) => {
     let id = cycler[idx % cycler.length].toString();

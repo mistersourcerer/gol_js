@@ -26,7 +26,7 @@ describe('render', () => {
   });
 
   it('allows overriding string representation of live cell', () => {
-    csl.render([[true], [true]], {output: consoleMock, live: 'XPTO'});
+    csl.render([[true], [true]], {output: consoleMock, alive: 'XPTO'});
 
     expect(consoleMock.log.mock.calls).toEqual([
       ['*******'],
