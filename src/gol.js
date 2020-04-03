@@ -1,6 +1,4 @@
 import life from './life';
-import generator from './generator';
-import consoleRender from './rendering/console';
 import { v4 as uuid } from 'uuid';
 
 const GolJS = () => {};
@@ -16,46 +14,53 @@ GolJS.forms = {
 };
 
 const defaultConfig = {
-  render: consoleRender,
-  generator: generator,
   gridSize: [25, 25],
   clock: Date,
   initialForms: [GolJS.forms.glider],
-  generations: 40,
+  maxGenerations: 40,
+  ttl: 300,
   options: {
     render: {
       alive: '[O]', joinWith: '', cycler: ['`', '\''],
     },
-    generator: {
-      ttl: 300,
-    },
   }
 };
 
-const state = (standardConfig) => {
-  return (overrides = {}) => {
-    let config = Object.assign(standardConfig, overrides);
-    config['__id__'] = uuid();
+const createFirstGen = (state) => {
+  return {...state,
+    // can we have more than one initial form?
+    grid: state.initialForms[0](life.grid(...state.gridSize)),
+    birthDate: state.clock.now(),
+    generation: 1,
+    ttl: state.ttl,
+  };
+}
 
-    if(config.generation === undefined) {
-      config = {...config, generation:{
-        grid: config.initialForms[0](life.grid(...config.gridSize)),
-        birthDate: config.clock.now(),
-        generation: 1,
-      }};
-    }
+GolJS.generate = (config = {}, callback = () => {}) => {
+  let state = {...defaultConfig, ...config};
 
-    return config.generation = config.generator.nextGen(
-      config.generation,
-      config.clock.now()
-    );
+  let brandNew = config.grid === undefined ||
+    (config.generation === undefined || config.generation <= 0)
+  if(brandNew) {
+    let newState = createFirstGen(state);
+    callback(newState);
+    return newState;
   }
-};
 
-GolJS.gol = (initialConfig = {}) => {
-  let standardConfig = Object.assign(defaultConfig, initialConfig);
+  let now = state.clock.now();
+  let done = (state.generation >= state.maxGenerations);
+  if(done || (now < state.birthDate + state.ttl)) {
+    return {...state, done: done};
+  }
 
-  return Object.assign(state(standardConfig), standardConfig);
+  let newState = {...state,
+    grid: life.nextGen(state.grid),
+    birthDate: now,
+    generation: state.generation + 1,
+  }
+  callback(newState);
+
+  return newState;
 }
 
 export default GolJS;
