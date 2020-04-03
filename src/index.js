@@ -1,6 +1,6 @@
 import GolJS from './gol';
 import life from './life';
-import consoleRender from './rendering/console';
+import text from './rendering/text';
 
 let done = false;
 let paused = false;
@@ -12,7 +12,7 @@ let renderOptions = {
 
 // default renderer
 let render = (grid) => {
-  consoleRender.render(grid, renderOptions.text);
+  text.render(grid, renderOptions.text);
 }
 
 let config = {

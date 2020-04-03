@@ -1,3 +1,30 @@
+const _consoleDevice = {
+  clear: () => console.clear(),
+  push: msg => console.log(msg),
+};
+const consoleDevice = () => _consoleDevice;
+
+const memoryDevice = () => {
+  return {
+    mem: [[]],
+    idx: 0,
+    clear: function() {
+      this.idx++;
+      this.mem[this.idx] = [];
+    },
+    push: function(msg) {
+      this.mem[this.idx].push(msg);
+    },
+  };
+};
+
+const defaults = {
+  device: consoleDevice(),
+  joinWith: '|',
+  alive: 'O',
+  cycler: ['*', '#'],
+};
+
 const joinCells = (grid, joinWith, alive) => {
   let sym;
   let dead = ''.padEnd(alive.length, ' ');
@@ -17,23 +44,16 @@ const joinCells = (grid, joinWith, alive) => {
   });
 };
 
-const defaults = {
-  output: console,
-  joinWith: '|',
-  alive: 'O',
-  cycler: ['*', '#'],
-};
-
 const render = (grid, options) => {
   let {
-    output,
+    device,
     alive,
     joinWith,
     dead,
     cycler,
-  } = Object.assign(defaults, options);
+  } = {...defaults, ...options};
 
-  output.clear();
+  device.clear();
 
   let joined = joinCells(grid, joinWith, alive);
 
@@ -43,17 +63,21 @@ const render = (grid, options) => {
     let row = `${line}${filler}`;
 
     if (idx == 0) {
-      output.log(''.padEnd(line.length, "*"));
+      device.push(''.padEnd(line.length, "*"));
     }
 
-    output.log(row);
+    device.push(row);
 
     if (idx == joined.length - 1) {
-      output.log(''.padEnd(line.length, "*"));
+      device.push(''.padEnd(line.length, "*"));
     }
   });
 };
 
 export default {
   render: render,
-}
+  devices: {
+    console: consoleDevice,
+    memory: memoryDevice,
+  },
+};
