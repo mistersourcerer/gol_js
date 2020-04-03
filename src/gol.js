@@ -18,6 +18,7 @@ const defaultConfig = {
   initialForms: [GolJS.forms.glider],
   maxGenerations: 40,
   ttl: 300,
+  done: false,
   options: {
     render: {
       alive: '[O]', joinWith: '', cycler: ['`', '\'']

@@ -22,18 +22,15 @@ const config = {
 }
 
 // Initial (standard) configurations
-let iteration = config
+let iteration = { ...config }
 
 const newGenerationCreated = (state) => {
   render(state.grid)
   console.log(`gen: ${state.generation} | pop: ${life.population(state.grid)}`)
-  done = state.done
 }
 
 const loop = () => {
   if (done) {
-    iteration = config
-    console.log('-the end-')
     return
   }
 
@@ -43,22 +40,28 @@ const loop = () => {
   }
 
   iteration = GolJS.generate(iteration, newGenerationCreated)
+  done = iteration.done
   window.requestAnimationFrame(loop)
 }
 
 const start = () => {
+  if (done) {
+    iteration = { ...config }
+  }
   done = false
   paused = false
-
   window.requestAnimationFrame(loop)
+  return iteration
 }
 
 const stop = () => {
   done = true
+  return iteration
 }
 
 const pause = () => {
   paused = true
+  return iteration
 }
 
 window.gol = { stop: stop, start: start, pause: pause }
