@@ -1,17 +1,16 @@
-import life from './life';
-import { v4 as uuid } from 'uuid';
+import life from './life'
 
-const GolJS = () => {};
+const GolJS = () => {}
 
 GolJS.forms = {
   glider: (grid) => {
-    grid = life.spawn(grid, 0, 2);
-    grid = life.spawn(grid, 1, 3);
-    grid = life.spawn(grid, 2, 1);
-    grid = life.spawn(grid, 2, 2);
-    return life.spawn(grid, 2, 3);
+    grid = life.spawn(grid, 0, 2)
+    grid = life.spawn(grid, 1, 3)
+    grid = life.spawn(grid, 2, 1)
+    grid = life.spawn(grid, 2, 2)
+    return life.spawn(grid, 2, 3)
   }
-};
+}
 
 const defaultConfig = {
   gridSize: [25, 25],
@@ -21,46 +20,48 @@ const defaultConfig = {
   ttl: 300,
   options: {
     render: {
-      alive: '[O]', joinWith: '', cycler: ['`', '\''],
-    },
+      alive: '[O]', joinWith: '', cycler: ['`', '\'']
+    }
   }
-};
+}
 
 const createFirstGen = (state) => {
-  return {...state,
+  return {
+    ...state,
     // can we have more than one initial form?
     grid: state.initialForms[0](life.grid(...state.gridSize)),
     birthDate: state.clock.now(),
     generation: 1,
-    ttl: state.ttl,
-  };
+    ttl: state.ttl
+  }
 }
 
 GolJS.generate = (config = {}, callback = () => {}) => {
-  let state = {...defaultConfig, ...config};
+  const state = { ...defaultConfig, ...config }
 
-  let brandNew = config.grid === undefined ||
+  const brandNew = config.grid === undefined ||
     (config.generation === undefined || config.generation <= 0)
-  if(brandNew) {
-    let newState = createFirstGen(state);
-    callback(newState);
-    return newState;
+  if (brandNew) {
+    const newState = createFirstGen(state)
+    callback(newState)
+    return newState
   }
 
-  let now = state.clock.now();
-  let done = (state.generation >= state.maxGenerations);
-  if(done || (now < state.birthDate + state.ttl)) {
-    return {...state, done: done};
+  const now = state.clock.now()
+  const done = (state.generation >= state.maxGenerations)
+  if (done || (now < state.birthDate + state.ttl)) {
+    return { ...state, done: done }
   }
 
-  let newState = {...state,
+  const newState = {
+    ...state,
     grid: life.nextGen(state.grid),
     birthDate: now,
-    generation: state.generation + 1,
+    generation: state.generation + 1
   }
-  callback(newState);
+  callback(newState)
 
-  return newState;
+  return newState
 }
 
-export default GolJS;
+export default GolJS

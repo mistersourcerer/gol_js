@@ -4,13 +4,13 @@ module.exports = {
       '@babel/preset-env',
       {
         targets: {
-          node: 'current',
-        },
-      },
-    ],
+          node: 'current'
+        }
+      }
+    ]
   ],
   plugins: [
     '@babel/plugin-proposal-throw-expressions',
-    '@babel/plugin-transform-runtime',
+    '@babel/plugin-transform-runtime'
   ]
-};
+}
