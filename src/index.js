@@ -3,39 +3,63 @@ import life from './life';
 import consoleRender from './rendering/console';
 
 let done = false;
-let generations = 40;
-let ttl = 300;
-let gridSize = [25, 25];
-let iteration = {};
+let paused = false;
 let renderOptions = {
-  alive: '[O]', joinWith: '', cycler: ['`', '\''],
+  text: {
+    alive: '[O]', joinWith: '', cycler: ['`', '\''],
+  }
 }
 
+// default renderer
+let render = (grid) => {
+  consoleRender.render(grid, renderOptions.text);
+}
+
+let config = {
+  maxGenerations: 40,
+  ttl: 300,
+  gridSize: [25, 25],
+};
+
+// Initial (standard) configurations
+let iteration = config;
+
 let newGenerationCreated = (state) => {
-  consoleRender.render(state.grid, renderOptions);
+  render(state.grid);
   console.log(`gen: ${state.generation} | pop: ${life.population(state.grid)}`);
   done = state.done;
 }
 
 const loop = () => {
   if(done) {
-    console.log("that was a good run");
+    iteration = config;
+    console.log('-the end-');
     return;
   }
+
+  if(paused) {
+    console.log('type gol.start() to unpause');
+    return;
+  }
+
   iteration = GolJS.generate(iteration, newGenerationCreated);
   requestAnimationFrame(loop);
 }
 
-const start = (gens = generations, cols = gridSize[0], rows = gridSize[1]) => {
+const start = () => {
   done = false;
-  generations = gens;
+  paused = false;
+
   requestAnimationFrame(loop);
 };
 
 const stop = () => {
   done = true;
-  console.clear();
-}
+};
 
-window.gol = { stop: stop, start: start };
+const pause = () => {
+  paused = true;
+};
+
+window.gol = { stop: stop, start: start, pause: pause };
 window.requestAnimationFrame(loop);
