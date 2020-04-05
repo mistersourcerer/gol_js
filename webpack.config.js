@@ -1,5 +1,7 @@
 const path = require('path')
 
+// TODO: what do I do with the html file that I am editing directly form dist/?
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -22,6 +24,25 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.ttf$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '/fonts/[name].[ext]'
+            }
+          }
+        ]
       }
     ]
   }

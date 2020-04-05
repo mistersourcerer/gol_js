@@ -1,8 +1,11 @@
 import GolJS from './gol'
 import life from './life'
 import text from './rendering/text'
+import './css/main.scss'
 
-let done = false
+require('devtools-detect')
+
+let done = true
 let paused = false
 const renderOptions = {
   text: {
@@ -56,6 +59,7 @@ const start = () => {
 
 const stop = () => {
   done = true
+  console.clear()
   return iteration
 }
 
@@ -66,3 +70,8 @@ const pause = () => {
 
 window.gol = { stop: stop, start: start, pause: pause }
 window.requestAnimationFrame(loop)
+
+window.addEventListener('devtoolschange', event => {
+  var display = event.detail.isOpen ? 'block' : 'none'
+  document.getElementById('controls').style.display = display
+})

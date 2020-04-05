@@ -1,0 +1,68 @@
+// TODO: any other way to refer to the path?
+//       this really feels wrong
+@import "../../node_modules/normalize.css/normalize.css";
+
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('../fonts/ArchivoBlack-Regular.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../fonts/Montserrat-Regular.ttf') format('ttf');
+}
+
+@font-face {
+  font-family: 'Montserrat-Thin';
+  src: url('../fonts/Montserrat-Thin.ttf') format('ttf');
+}
+
+//https://colorhunt.co/palette/168200
+
+body {
+  background-color: #4d4646;
+  padding: 1rem;
+}
+
+header {
+  max-width: 1200px;
+  min-width: 700px;
+  text-align: left;
+  font-family: 'Archivo Black', sans-serif;
+  color: #f5eaea;
+}
+header h1 {
+  font-size: 45px;
+}
+header h2 {
+  font-size: 30px;
+  color: #5b5656;
+}
+header a {
+  text-decoration: none;
+  color: #5b5656;
+}
+
+main {
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  color: #f5eaea;
+}
+
+#controls {
+  padding-top: 50px;
+  width: 700px;
+  display: none;
+}
+
+.btext {
+  font-family: 'Montserrat-Thin', sans-serif;
+  background:none;
+  border:none;
+  margin:0;
+  padding:0;
+  cursor: pointer;
+  color: #7fcd91;
+  padding-right: 20px;
+}
