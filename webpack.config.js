@@ -1,7 +1,5 @@
 const path = require('path')
 
-// TODO: what do I do with the html file that I am editing directly form dist/?
-
 module.exports = {
   entry: './src/index.js',
   output: {
