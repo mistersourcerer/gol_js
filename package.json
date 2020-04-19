@@ -37,7 +37,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "jest": {
     "moduleFileExtensions": [
       "js"
