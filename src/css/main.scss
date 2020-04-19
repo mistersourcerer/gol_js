@@ -48,12 +48,6 @@ main {
   color: #f5eaea;
 }
 
-#controls {
-  padding-top: 50px;
-  width: 700px;
-  display: none;
-}
-
 .btext {
   font-family: 'Montserrat-Thin', sans-serif;
   background:none;
@@ -63,4 +57,25 @@ main {
   cursor: pointer;
   color: #7fcd91;
   padding-right: 20px;
+}
+
+.implementations {
+  .controls {
+    padding-top: 50px;
+    width: 700px;
+    display: none;
+  }
+
+  .impl-type {
+    display: none;
+  }
+}
+
+.toggle {
+  .show {
+    display: 'block';
+  }
+  .hide {
+    display: 'none';
+  }
 }

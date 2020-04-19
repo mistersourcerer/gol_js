@@ -3,8 +3,6 @@ import life from './life'
 import text from './rendering/text'
 import './css/main.scss'
 
-require('devtools-detect')
-
 let done = true
 let paused = false
 const renderOptions = {
@@ -14,7 +12,7 @@ const renderOptions = {
 }
 
 // default renderer
-const render = (grid) => {
+let callback = (grid, _) => {
   text.render(grid, renderOptions.text)
 }
 
@@ -28,7 +26,7 @@ const config = {
 let iteration = { ...config }
 
 const newGenerationCreated = (state) => {
-  render(state.grid)
+  callback(state.grid, state)
   console.log(`gen: ${state.generation} | pop: ${life.population(state.grid)}`)
 }
 
@@ -38,7 +36,7 @@ const loop = () => {
   }
 
   if (paused) {
-    console.log('type gol.start() to unpause')
+    console.log('type golControls.start() to unpause')
     return
   }
 
@@ -47,7 +45,10 @@ const loop = () => {
   window.requestAnimationFrame(loop)
 }
 
-const start = () => {
+export const start = (_callback) => {
+  if (_callback !== undefined) {
+    callback = _callback
+  }
   if (done) {
     iteration = { ...config }
   }
@@ -57,21 +58,13 @@ const start = () => {
   return iteration
 }
 
-const stop = () => {
+export const stop = () => {
   done = true
   console.clear()
   return iteration
 }
 
-const pause = () => {
+export const pause = () => {
   paused = true
   return iteration
 }
-
-window.gol = { stop: stop, start: start, pause: pause }
-window.requestAnimationFrame(loop)
-
-window.addEventListener('devtoolschange', event => {
-  var display = event.detail.isOpen ? 'block' : 'none'
-  document.getElementById('controls').style.display = display
-})

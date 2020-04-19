@@ -11,19 +11,43 @@
 
     <main>
       <div>
-        This is a (soon to be) collection of
-        JavaScript implementations of the Conway's Game Of Life.
+        This is a JavaScript implementation of the Conway's Game Of Life.
+        <br />
+        The rendering is done in Canvas (and on the console) using vanilla JS.
+        Controls are implemented in a variety of JS frameworks.
       </div>
+
+      <br />
 
       <div>
-        To play around with the vanilla JS implementation,
-        open the developer tools console.
+        Console with Vanilla JS controls.
+        <div class="toggle gol-console">
+          <button class="btext show">show</button>
+          <button class="btext hide">hide</button>
+        </div>
       </div>
 
-      <div id="controls">
-        <button id="start" class="btext" onClick="gol.start()">start</button>
-        <button id="pause" class="btext" onClick="gol.pause()">pause</button>
-        <button id="stop" class="btext" onClick="gol.stop()">finish</button>
+      <br />
+
+      <div>
+        Vanilla JS controls
+        <div class="toggle gol-vanilla">
+          <button class="btext show">show</button>
+          <button class="btext hide">hide</button>
+        </div>
+      </div>
+
+      <div class="implementations">
+        <div id="gol-console" class="impl-type">
+          To play around with the console implementation,
+          please open the console.
+
+          <div id="gol-console-controls" class="controls">
+            <button id="start" class="btext" onClick="golControls.start()">start</button>
+            <button id="pause" class="btext" onClick="golControls.pause()">pause</button>
+            <button id="stop" class="btext" onClick="golControls.stop()">finish</button>
+          </div>
+        </div>
       </div>
     </main>
 
