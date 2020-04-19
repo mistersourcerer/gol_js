@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <%= require('html-loader!./partials/google.html') %>
+    <title>Conway's Game Of Life JS (by @mistersourcerer)</title>
+  </head>
+  <body>
+    <header>
+      <h1>GolJS [Conway's Game of Life]</h1>
+      <h2>butchered by <a href="https://twitter.com/mistersourcerer" target="_blank">@mistersourcerer</a></h2>
+    </header>
+
+    <main>
+      <div>
+        This is a (soon to be) collection of
+        JavaScript implementations of the Conway's Game Of Life.
+      </div>
+
+      <div>
+        To play around with the vanilla JS implementation,
+        open the developer tools console.
+      </div>
+
+      <div id="controls">
+        <button id="start" class="btext" onClick="gol.start()">start</button>
+        <button id="pause" class="btext" onClick="gol.pause()">pause</button>
+        <button id="stop" class="btext" onClick="gol.stop()">finish</button>
+      </div>
+    </main>
+
+    <%= require('html-loader!./partials/forkme.html') %>
+    <script src="main.js"></script>
+  </body>
+</html>

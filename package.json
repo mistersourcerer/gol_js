@@ -19,6 +19,7 @@
     "css-loader": "^3.4.2",
     "devtools-detect": "^3.0.0",
     "file-loader": "^6.0.0",
+    "html-webpack-plugin": "^4.2.0",
     "jest": "^25.1.0",
     "node-sass": "^4.13.1",
     "normalize.css": "^8.0.1",
