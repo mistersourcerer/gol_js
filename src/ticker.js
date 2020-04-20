@@ -1,7 +1,6 @@
 import GolJS from './gol'
 import life from './life'
 import text from './rendering/text'
-import './css/main.scss'
 
 let done = true
 let paused = false
