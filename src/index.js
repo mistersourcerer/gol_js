@@ -15,6 +15,13 @@ const implNameFromElement = (el) => {
   return null
 }
 
+const hideCurrent = () => {
+  currentShowing.style.display = 'none'
+  const currentImplName = implNameFromElement(currentShowing)
+  document.querySelector(`.toggle .${currentImplName}.show`).style.display = 'block'
+  document.querySelector(`.toggle .${currentImplName}.hide`).style.display = 'none'
+}
+
 const toggleImpl = (event) => {
   const button = event.target
   button.style.display = 'none'
@@ -25,19 +32,14 @@ const toggleImpl = (event) => {
   const hideBtn = document.querySelector(`.toggle .${implName}.hide`)
 
   if (isShow) {
-    if (currentShowing !== null) {
-      currentShowing.style.display = 'none'
-      const currentImplName = implNameFromElement(currentShowing)
-      document.querySelector(`.toggle .${currentImplName}.show`).style.display = 'block'
-      document.querySelector(`.toggle .${currentImplName}.hide`).style.display = 'none'
-    }
+    if (currentShowing !== null) hideCurrent()
     impl.style.display = 'block'
-    currentShowing = impl
     hideBtn.style.display = 'block'
+    currentShowing = impl
   } else {
     impl.style.display = 'none'
-    currentShowing = null
     showBtn.style.display = 'block'
+    currentShowing = null
   }
 }
 
