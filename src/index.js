@@ -1,15 +1,13 @@
-import { start, stop, pause } from './ticker'
 import './console'
 
-window.golControls = { stop: stop, start: start, pause: pause }
-const implTypeRegepx = /gol-*/
-let currentImpl
+let currentShowing = null
+const implNameRegepx = /gol-*/
 
-const implTypeFromElement = (el) => {
+const implNameFromElement = (el) => {
   // anyway of destructuring the array here?
   for (const entry of el.classList.entries()) {
     const klass = entry[1]
-    if (klass.match(implTypeRegepx)) {
+    if (klass.match(implNameRegepx)) {
       return klass
     }
   }
@@ -17,47 +15,74 @@ const implTypeFromElement = (el) => {
   return null
 }
 
-const implFromToggleBtn = (button) => {
-  return implTypeFromElement(button)
-}
+const toggleImpl = (event) => {
+  const button = event.target
+  button.style.display = 'none'
+  const isShow = button.classList.contains('show')
+  const implName = implNameFromElement(button)
+  const impl = document.querySelector(`.impl-type.${implName}`)
+  const showBtn = document.querySelector(`.toggle .${implName}.show`)
+  const hideBtn = document.querySelector(`.toggle .${implName}.hide`)
 
-const toggle = (event) => {
-  let buttonToShow
-
-  const el = event.toElement
-  el.style.display = 'none'
-  if (el.classList.contains('show')) {
-    buttonToShow = '.hide'
-    currentImpl = document.getElementById(implFromToggleBtn(el))
-    currentImpl.style.display = 'block'
+  if (isShow) {
+    if (currentShowing !== null) {
+      currentShowing.style.display = 'none'
+      const currentImplName = implNameFromElement(currentShowing)
+      document.querySelector(`.toggle .${currentImplName}.show`).style.display = 'block'
+      document.querySelector(`.toggle .${currentImplName}.hide`).style.display = 'none'
+    }
+    impl.style.display = 'block'
+    currentShowing = impl
+    hideBtn.style.display = 'block'
   } else {
-    buttonToShow = '.show'
-    currentImpl.style.display = 'none'
-    currentImpl = null
+    impl.style.display = 'none'
+    currentShowing = null
+    showBtn.style.display = 'block'
   }
-
-  document.querySelector(`.toggle ${buttonToShow}`).style.display = 'block'
 }
+
+const hideAlternativeImplementations = () => {
+  document
+    .querySelectorAll('.implementations .impl-type')
+    .forEach((impl) => {
+      impl.style.display = 'none'
+    })
+}
+
+const displayOnlyShowButtons = () => {
+  Array
+    .from(document.querySelectorAll('.toggle .hide'))
+    .forEach(btn => { btn.style.display = 'none' })
+}
+
+const bindTogglesForImplementations = () => {
+  document.querySelectorAll('.toggle').forEach((toggle) => {
+    const implName = implNameFromElement(toggle)
+    const btns = [toggle.querySelector('.show'), toggle.querySelector('.hide')]
+    btns.forEach((btn) => {
+      btn.classList.add(implName)
+      btn.addEventListener('click', toggleImpl)
+    })
+  })
+}
+
+// this is exclusively for test
+// since readystatechange seem to not be called by JSDOM (jest...)
+// TODO: find where am I wrong here and fix this UGLY ASS mess
+let loaded = false
 
 const config = () => {
-  if (document.readyState !== 'complete') {
-    return
-  }
+  if (document.readyState !== 'complete') return
+  loaded = true
 
-  const buttonsSelector = document.querySelectorAll('.toggle button')
-
-  // add the gol-* class to the buttons under it.
-  document.querySelectorAll('.toggle').forEach((toggle) => {
-    const implType = implTypeFromElement(toggle)
-    if (implType) {
-      buttonsSelector.forEach(btn => btn.classList.add(implType))
-    }
-  })
-
-  document.querySelectorAll('.toggle button.hide')
-    .forEach((el) => { el.style.display = 'none' })
-
-  buttonsSelector.forEach(btn => btn.addEventListener('click', toggle))
+  hideAlternativeImplementations()
+  displayOnlyShowButtons()
+  bindTogglesForImplementations()
 }
 
 document.onreadystatechange = config
+
+// this is exclusively for test
+// since readystatechange seem to not be called by JSDOM (jest...)
+// TODO: find where am I wrong here and fix this UGLY ASS mess
+if (!loaded) config()
