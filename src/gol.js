@@ -12,6 +12,10 @@ GolJS.forms = {
   }
 }
 
+GolJS.spawn = (grid, x, y) => {
+  return life.spawn(grid, x, y)
+}
+
 const defaultConfig = {
   gridSize: [25, 25],
   clock: Date,

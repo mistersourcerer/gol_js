@@ -1,5 +1,5 @@
 import './css/main.scss'
-import { start, stop, pause } from './ticker'
 import './index.js'
+import { start, stop, pause } from './ticker'
 
-window.golControls = { stop: stop, start: start, pause: pause }
+window.Gol = { stop: stop, start: start, pause: pause }

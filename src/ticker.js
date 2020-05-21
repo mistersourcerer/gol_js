@@ -1,18 +1,13 @@
 import GolJS from './gol'
 import life from './life'
-import text from './rendering/text'
 
 let done = true
 let paused = false
-const renderOptions = {
-  text: {
-    alive: '[O]', joinWith: '', cycler: ['`', '\'']
-  }
-}
 
-// default renderer
-let callback = (grid, _) => {
-  text.render(grid, renderOptions.text)
+// default callback (is a "noop" render).
+let callback = (grid, state) => {
+  console.log(grid)
+  console.log(state)
 }
 
 const config = {
@@ -44,10 +39,8 @@ const loop = () => {
   window.requestAnimationFrame(loop)
 }
 
-export const start = (_callback) => {
-  if (_callback !== undefined) {
-    callback = _callback
-  }
+export const start = () => {
+  callback = window.golRenderConsole // forcing it for now...
   if (done) {
     iteration = { ...config }
   }

@@ -4,74 +4,63 @@
     <title>Conway's Game Of Life JS (by @mistersourcerer)</title>
   </head>
   <body>
-    <header>
-      <h1>GolJS [Conway's Game of Life]</h1>
-      <h2>butchered by <a href="https://twitter.com/mistersourcerer" target="_blank">@mistersourcerer</a></h2>
-    </header>
-
-    <main>
-      <div>
-        This is a JavaScript implementation of the Conway's Game Of Life.
-        <br />
-        The rendering is done in Canvas (and on the console) using vanilla JS.
-        Controls are implemented in a variety of JS frameworks.
-      </div>
-
-      <br />
-
-      <div>
-        Console with Vanilla JS controls.
-        <div class="toggle gol-console">
-          <button class="btext show">show</button>
-          <button class="btext hide">hide</button>
+    <div class="screen">
+      <header class="box">
+        <h1><span class="accent">Conway's</span> Game of Life</h1>
+        <div class="box right">
+          <h2>butchered by <a href="https://twitter.com/mistersourcerer" target="_blank">@mistersourcerer</a></h2>
         </div>
-      </div>
+      </header>
+    </div>
 
-      <br />
+    <hr />
 
-      <div>
-        Vanilla JS controls
-        <div class="toggle gol-vanilla">
-          <button class="btext show">show</button>
-          <button class="btext hide">hide</button>
-        </div>
-      </div>
+    <div class="screen">
+      <main>
+        <section class="about">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        </section>
 
-      <br />
-      <br />
-      <br />
-
-      <div class="implementations">
-        Different implementations for the controls follow:
-        <br />
-        <br />
-        <br />
-
-        <div class="impl-type gol-console">
-          To play around with the console implementation,
-          please open the console.
-
-          <div class="controls">
-            <button id="start" class="btext start" onClick="golControls.start()">start</button>
-            <button id="pause" class="btext pause" onClick="golControls.pause()">pause</button>
-            <button id="stop" class="btext stop" onClick="golControls.stop()">finish</button>
+        <section class="controls box-row">
+          <div>
+            <i class="fas fa-bars fa-1x btn menu"></i>
+            <i class="fas fa-stop fa-1x btn stop"></i>
+            <i class="fas fa-pause fa-1x btn pause"></i>
+            <i class="fas fa-play fa-1x btn start"></i>
           </div>
-        </div>
 
-        <div class="impl-type gol-vanilla">
-          When ready, we are going to be able to play with all settings
-          in here.
-
-          <div class="controls">
-            <button class="btext start" onClick="golControls.start()">start</button>
-            <button class="btext pause" onClick="golControls.pause()">pause</button>
-            <button class="btext stop" onClick="golControls.stop()">finish</button>
+          <div class="extra">
+            <div class="box-row">
+              <span>Generation:</span>
+              <span class="gen">0</span>
+            </div>
           </div>
-        </div>
-      </div>
-    </main>
+        </section>
+
+        <section class="grid">
+          <div class="menu">
+            <ul>
+              <li class="box-row" onclick="switchImpl('vanillaCanvas')">
+                <div class="img-button vanilla"></div>
+                <div class="text box">
+                  <span class="impl">Vanilla JS</span>
+                  <span class="rendering">Canvas element</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <canvas id="gol">a</canvas>
+
+        </section>
+      </main>
+    </div>
 
     <%= require('html-loader!./partials/forkme.html') %>
     <script src="main.js"></script>
+    <script src="https://kit.fontawesome.com/bacda624bc.js" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -2,72 +2,178 @@
 
 @font-face {
   font-family: 'Archivo Black';
-  src: url('../fonts/ArchivoBlack-Regular.ttf') format('ttf');
+  src: url('../fonts/ArchivoBlack-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('../fonts/Montserrat-Regular.ttf') format('ttf');
+  src: url('../fonts/Montserrat-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Montserrat-Thin';
-  src: url('../fonts/Montserrat-Thin.ttf') format('ttf');
+  src: url('../fonts/Montserrat-Thin.ttf') format('truetype');
 }
 
-//https://colorhunt.co/palette/168200
-
 body {
-  background-color: #4d4646;
-  padding: 1rem;
+  background-color: #fff3cd;
+}
+
+.screen {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+}
+
+.box-row {
+  display: flex;
+  flex-direction: row;
+}
+
+hr {
+  border: none;
+  border-top: 3px solid #ffc38b;
+  color: #333;
+  overflow: visible;
+  text-align: center;
 }
 
 header {
-  max-width: 1200px;
-  min-width: 700px;
-  text-align: left;
-  font-family: 'Archivo Black', sans-serif;
-  color: #f5eaea;
-}
-header h1 {
-  font-size: 45px;
-}
-header h2 {
-  font-size: 30px;
-  color: #5b5656;
-}
-header a {
-  text-decoration: none;
-  color: #5b5656;
+  width: 800px;
+
+  .box.right {
+    padding-left: 20em;
+    margin-top: -3em;
+  }
+
+  h1 {
+    font-family: 'Archivo Black', sans-serif;
+    color: #4d3e3e;
+    font-size: 56px;
+    margin-top: 10px;
+
+    .accent {
+      color: #ffc38b;
+    }
+  }
+
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    color: #4d3e3e;
+    font-size: 24px;
+    a {
+      text-decoration: underline;
+    }
+    a:visited {
+      color: #4d3e3e;
+    }
+  }
 }
 
 main {
-  text-align: left;
+  width: 800px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 20px;
-  color: #f5eaea;
-}
+  color: #4d3e3e;
+  font-size: 16px;
 
-.btext {
-  font-family: 'Montserrat-Thin', sans-serif;
-  background:none;
-  border:none;
-  margin:0;
-  padding:0;
-  cursor: pointer;
-  color: #7fcd91;
-  padding-right: 20px;
-}
-
-.implementations {
-  .controls {
-    padding-top: 50px;
-    width: 700px;
-    display: none;
+  .about {
+    margin-top: 10px;
   }
 
-  .impl-type {
-    display: none;
+  .controls {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-size: 22px;
+    justify-content: space-between;
+
+    .btn:hover {
+      cursor: pointer;
+    }
+
+    i {
+      padding-right: 10px;
+    }
+
+    .fas {
+      color: #ff926b;
+    }
+
+    .extra {
+      .gen {
+        padding-left: 10px;
+        color: #ff926b;
+        width: 50px;
+      }
+    }
+  }
+}
+
+.grid {
+  width: 800px;
+  height: 500px;
+  background-color: #ffc38b;
+
+  ul {
+    padding-inline-start: 8px;
+    padding-bottom: 10px;
+
+    li {
+      padding-top: 12px;
+    }
+  }
+
+  .menu {
+    position: relative;
+    visibility: hidden;
+    top: -1.8em;
+
+    ul {
+      position: absolute;
+      width: 50%;
+      background-color: #4d3e3e;
+      border-radius: 10px;
+    }
+
+    .img-button {
+      width: 50px;
+      height: 50px;
+      background: url('../images/js.png');
+      background-size: 50px;
+      flex: 1;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    .img-button:hover {
+      cursor: pointer;
+    }
+
+    .text {
+      flex: 6;
+    }
+
+    .text:hover {
+      cursor: pointer;
+    }
+
+    .impl {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 24px;
+      color: #ffc38b;
+    }
+
+    .rendering {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      color: #ffc38b;
+    }
   }
 }
 

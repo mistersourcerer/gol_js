@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "@babel/runtime": "^7.9.2"
+    "@babel/runtime": "^7.9.2",
+    "@noctane/core": "0.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -19,6 +20,7 @@
     "css-loader": "^3.4.2",
     "devtools-detect": "^3.0.0",
     "file-loader": "^6.0.0",
+    "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.2.0",
     "jest": "^25.1.0",
     "node-sass": "^4.13.1",
@@ -32,7 +34,7 @@
   "scripts": {
     "test": "jest",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
-    "start:dev": "webpack-dev-server",
+    "start:dev": "webpack-dev-server --host 0.0.0.0",
     "build": "webpack --mode=production"
   },
   "keywords": [],

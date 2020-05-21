@@ -1,4 +1,6 @@
 describe('binding events for showing different implementations', () => {
+  const _Gol = window.Gol
+
   beforeAll(() => {
     document.body.innerHTML = `
       <div class="toggle gol-something">
@@ -14,24 +16,31 @@ describe('binding events for showing different implementations', () => {
       <div class="implementations">
         <div class="impl-type gol-something">
           <div class="controls">
-            <button id="start" class="btext">start</button>
-            <button id="pause" class="btext">pause</button>
-            <button id="stop" class="btext">finish</button>
+            <button class="btext start">start</button>
+            <button class="btext pause">pause</button>
+            <button class="btext stop">stop</button>
           </div>
         </div>
 
         <div class="impl-type gol-anotherone">
           <div class="controls">
-            <button id="start" class="btext">start</button>
-            <button id="pause" class="btext">pause</button>
-            <button id="stop" class="btext">finish</button>
+            <button class="btext start">start</button>
+            <button class="btext pause">pause</button>
+            <button class="btext stop">stop</button>
           </div>
         </div>
       </div>
     `
+    window.Gol = {
+      start: jest.fn(),
+      pause: jest.fn(),
+      stop: jest.fn()
+    }
 
     require('index')
   })
+
+  afterAll(() => { window.Gol = _Gol })
 
   it('hide all alternative implementations when loading', () => {
     const impl = document.querySelector('.implementations .impl-type.gol-something')
@@ -60,6 +69,23 @@ describe('binding events for showing different implementations', () => {
   it('ensure hide button is not visible at first', () => {
     const hideButtons = Array.from(document.querySelectorAll('.toggle .hide'))
     expect(hideButtons.every(btn => btn.style.display === 'none')).toBe(true)
+  })
+
+  it('binds the control functions for all implementations', () => {
+    const impl = document.querySelector('.impl-type.gol-something')
+
+    const start = impl.querySelector('.controls .start')
+    start.click()
+    expect(window.Gol.start.mock.calls.length).toBe(1)
+
+    const pause = impl.querySelector('.controls .pause')
+    pause.click()
+    expect(window.Gol.pause.mock.calls.length).toBe(1)
+
+    const stop = impl.querySelector('.controls .stop')
+    stop.click()
+    expect(window.Gol.stop.mock.calls.length).toBe(1)
+
   })
 
   describe('when toggling implementations', () => {
