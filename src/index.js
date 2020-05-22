@@ -39,19 +39,37 @@ const toggleCell = (cell) => {
   }
 }
 
+let dragging = false
+let toggled = { x: null, y: null }
+
 const dragStart = (e) => {
-  // translate the coordinates to cell
-  // store the cell if not stored yet
-  // turn it to alive in the next renderCanvas call
-  //
-  // (same for move)
-  toggleCell(coordToCell({ x: e.offsetX, y: e.offsetY }))
+  dragging = true
+  toggled = coordToCell({ x: e.offsetX, y: e.offsetY })
+  toggleCell(toggled)
 }
 
 const dragMove = (e) => {
+  if (!dragging) return
+  // when a drag starts
+  // we verify if the pointer was over this cell.
+  // if not, we store it.
+  // when the cell with the pointer over it changes,
+  // we know we are over a different cell...
+  const cell = coordToCell({ x: e.offsetX, y: e.offsetY })
+  if (cell.x !== toggled.x || cell.y !== toggled.y) {
+    toggled = cell
+    toggleCell(cell)
+  }
 }
 
 const dragStop = (e) => {
+  dragging = false
+
+  const cell = coordToCell({ x: e.offsetX, y: e.offsetY })
+  if (cell.x !== toggled.x || cell.y !== toggled.y) {
+    toggleCell(cell)
+  }
+  toggled = { x: null, y: null }
 }
 
 const bindDrag = () => {
@@ -187,6 +205,8 @@ const pause = () => {
 
 const stop = () => {
   controls.stopped = true
+  toSpawn = []
+  reset()
 }
 
 const switchImpl = (type) => {
