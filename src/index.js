@@ -63,7 +63,10 @@ const bindDrag = () => {
 }
 
 const renderCell = (x, y, state, color) => {
-  const cell = state.emptyGrid.cells[y][x]
+  const line = state.emptyGrid.cells[y]
+  if (!line) return
+  const cell = line[x]
+  if (!cell) return
   Grid.renderCell(cell, state.context, {
     ...state.config,
     backgroundColor: color || state.config.cellColor
@@ -86,6 +89,7 @@ const renderCanvas = (state) => {
   toSpawn.forEach((cell) => {
     state.grid = GolJS.spawn(state.grid, cell.x, cell.y)
   })
+  toSpawn = []
 
   // now paint cells that are alive
   state.grid.forEach((row, y) => {
@@ -128,7 +132,7 @@ const vanillaCanvas = () => {
     canvas: canvas,
     emptyGrid: emptyGrid,
     context: context,
-    maxGenerations: 80,
+    maxGenerations: 290391,
     ttl: 100,
     config: config,
     size: {
