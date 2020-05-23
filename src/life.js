@@ -49,7 +49,7 @@ const _applyRules = (neighborsCount, currentStatus) => {
   const alive = currentStatus === true
   let nextStatus = false
 
-  if (alive && neighborsCount >= 2 && neighborsCount <= 3) {
+  if (alive && (neighborsCount === 2 || neighborsCount === 3)) {
     nextStatus = true
   } else if (!alive && neighborsCount === 3) {
     nextStatus = true
