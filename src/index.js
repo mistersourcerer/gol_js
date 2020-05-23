@@ -134,7 +134,7 @@ const vanillaCanvas = () => {
     cellSize: 20,
     borderSize: 1,
     backgroundColor: '#ffc38b',
-    borderColor: '#ffc38b',
+    borderColor: '#7f6f6f',
     cellColor: '#4d3e3e'
   }
   const emptyGrid = Grid.empty(config)
