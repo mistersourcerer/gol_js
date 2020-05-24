@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
-    "@noctane/core": "0.0.1"
+    "@noctane/core": "0.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
